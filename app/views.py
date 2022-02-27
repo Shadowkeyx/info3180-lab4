@@ -85,7 +85,7 @@ def files():
     if not session.get('logged_in'):
         abort(401)
     images = get_uploaded_images()
-    return render_template('files.html', image_list = images)
+    return render_template('files.html', image_list = images) 
 
 
 @app.route('/logout')
