@@ -65,6 +65,28 @@ def login():
             return redirect(url_for('upload'))
     return render_template('login.html', error=error)
 
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    image_path = []
+    for subdir, dirs, files in os.walk(rootdir + './uploads'):
+        for file in files:
+            if (file.endswith('.jpg') or file.endswith('.png') or file.endswith('.jpeg')):
+                image_path.append(file)
+                print(file)
+    return image_path
+
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    path = os.getcwd()
+    return send_from_directory(os.path.join(path, app.config['UPLOAD_FOLDER']), filename)
+
+@app.route('/files')
+def files():
+    if not session.get('logged_in'):
+        abort(401)
+    images = get_uploaded_images()
+    return render_template('files.html', image_list = images)
+
 
 @app.route('/logout')
 def logout():
